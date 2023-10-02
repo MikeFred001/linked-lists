@@ -21,7 +21,7 @@ class LinkedList {
   constructor(vals = []) {
     for (let val of vals) {
       this.push(val);
-      this.length++;
+
     }
   }
 
@@ -49,35 +49,52 @@ class LinkedList {
 
   unshift(val) {
     const newNode = new Node(val);
-    newNode.next = this.head;
-    this.head = newNode;
+    if (this.head === null){
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+
+      newNode.next = this.head;
+      this.head = newNode;
+    }
     this.length++;
   }
 
   /** pop(): return & remove last item. */
 
   pop() {
-    if (!head) throw new Error();
+    if (!this.head) throw new Error();
 
     let current = this.head;
-
+    if (this.length === 1){
+      this.tail = this.head = null;
+      this.length = 0;
+      return current.val;
+    }
     while (current !== null) {
-      if (current.next.val === this.tail.val) {
-        const removed = this.tail.val;
+      const removed = this.tail;
+
+      if (current.next === this.tail) {
+        current.next = null
         this.tail = current;
         this.length--;
-        return removed;
-      } else {
-        current = current.next;
+        return removed.val;
       }
+      current = current.next;
     }
   }
 
   /** shift(): return & remove first item. */
 
   shift() {
-    if (!head) throw new Error();
+    if (!this.head) throw new Error();
 
+    if (this.length === 1){
+      const removed = this.head.val;
+      this.head = this.tail = null;
+      this.length--;
+      return removed;
+    }
     const removed = this.head.val;
     this.head = this.head.next;
     this.length--;
@@ -105,19 +122,20 @@ class LinkedList {
   /** setAt(idx, val): set val at idx to val */
 
   setAt(idx, val) {
+    // if (idx + 1 > this.length || idx < this.length) throw new Error();
     let current = this.head;
     let currIdx = 0;
 
     while (current !== null) {
       if (currIdx === idx) {
         current.val = val;
+        return current.val;
       } else {
         currIdx++;
         current = current.next;
       };
     }
-
-    if (current.next === null) throw new Error();
+    throw new Error();
   }
 
   /** insertAt(idx, val): add node w/val before idx. */
