@@ -21,12 +21,11 @@ class LinkedList {
   constructor(vals = []) {
     for (let val of vals) {
       this.push(val);
-
     }
   }
 
   printVals() {
-    current = this.head;
+    let current = this.head;
 
     while (current !== null) {
       console.log(current.val);
@@ -61,7 +60,7 @@ class LinkedList {
   }
 
   /** pop(): return & remove last item. */
-
+  // TODO: Comments for each "if" case
   pop() {
     if (!this.head) throw new Error();
 
@@ -122,7 +121,6 @@ class LinkedList {
   /** setAt(idx, val): set val at idx to val */
 
   setAt(idx, val) {
-    // if (idx + 1 > this.length || idx < this.length) throw new Error();
     let current = this.head;
     let currIdx = 0;
 
@@ -146,6 +144,16 @@ class LinkedList {
 
   insertAt(idx, val) {
     const newNode = new Node(val);
+
+    if (this.length === 0) {
+      this.head = this.tail = newNode;
+      this.length++;
+      return newNode.val;
+    }
+
+    if (idx === 0) return this.unshift(val);
+    if (idx === this.length) return this.push(val);
+
     let current = this.head;
     let currIdx = 0;
 
@@ -153,18 +161,22 @@ class LinkedList {
       if (currIdx + 1 === idx) {
         newNode.next = current.next;
         current.next = newNode;
+        this.length++;
+        return current.next.val;
       } else {
         currIdx++;
         current = current.next;
       };
     }
 
-    if (current.next === null) throw new Error();
+    throw new Error();
   }
 
   /** removeAt(idx): return & remove item at idx, */
 
   removeAt(idx) {
+    if (idx === 0) return this.shift();
+
     let current = this.head;
     let currIdx = 0;
 
@@ -172,18 +184,22 @@ class LinkedList {
       if (currIdx + 1 === idx) {
         const removed = current.next.val;
         current.next = current.next.next;
+        this.length--;
+        return removed;
       } else {
         currIdx++;
         current = current.next;
       };
     }
 
-    if (current.next === null) throw new Error();
+    throw new Error();
   }
 
   /** average(): return an average of all values in the list */
 
   average() {
+    if (this.length === 0) return 0;
+
     let current = this.head;
     let sum = 0;
 
